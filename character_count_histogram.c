@@ -4,6 +4,9 @@
 // a - z = 97 to 122
 // A - Z = 65 to  90
 
+void print_h_bar(int length);
+void print_h_divider(int length);
+
 int main()
 {
   int c, i, x, y, highest_bar;
@@ -38,30 +41,34 @@ int main()
   for (y = 0; y < 10; ++y) {
     printf("%c:|", y + '0');
     int bar_length = number_count[y];
-    for (x = 0; x < bar_length; ++x) {
-      printf("-|");
-    }
-    if (bar_length > 0)
-      printf("%d", bar_length);
-    printf("\n");
+    print_h_bar(bar_length);
   }
 
   // Line dividing the types.
   // This accounts for the labelling of the y axis and the number at the end of each bar.
-  printf("----");
-  for (x = 0; x < highest_bar; ++x) {
-    printf("--");
-  }
-  printf("\n");
+  print_h_divider(highest_bar * 2 + 4);
 
   for (y = 0; y < 26; ++y) {
     printf("%c:|", y + 'A');
     int bar_length = alpha_count[y];
-    for (x = 0; x < bar_length; ++x) {
-      printf("-|");
-    }
-    if (bar_length > 0)
-      printf("%d", bar_length);
-    printf("\n");
+    print_h_bar(bar_length);
   }
+}
+
+void print_h_bar(int length)
+{
+  for (int x = 0; x < length; ++x) {
+    printf("-|");
+  }
+
+  if (length > 0) printf("%d", length);
+  printf("\n");
+}
+
+void print_h_divider(int length)
+{
+  for (int x = 0; x < length; ++x) {
+    printf("-");
+  }
+  printf("\n");
 }
