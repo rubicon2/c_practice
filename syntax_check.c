@@ -155,6 +155,8 @@ int compare_str(char a[], char b[])
 
 void free_stack_mem(struct Stack* stack_ptr)
 {
+  // Any stuff popped off the stack prior to calling this method should free the memory of the items that are popped off. 
+  // Otherwise, any items on the stack after the last index will not be freed, since pop() doesn't free the memory.
   void* stack_item_ptr;
   do {
     stack_item_ptr = pop(stack_ptr);
@@ -250,9 +252,12 @@ int main(void)
         
         case '}': {
           // If pop returns null pointer, there are too many closing braces - it's a syntax error.
-          struct Position* closing_pos = (struct Position*)pop(&braces);
-          if (closing_pos == NULL) {
+          struct Position* pos_ptr = pop(&braces);
+          if (pos_ptr == NULL) {
             add_error(errors, &error_count, line + 1, col + 1, "unbalanced braces");
+          } else {
+            // The position has been popped off the stack and we will free the memory now we are done with it.
+            free(pos_ptr);
           }
           break;
         }
@@ -265,9 +270,11 @@ int main(void)
         }
 
         case ')': {
-          struct Position* closing_pos = (struct Position*)pop(&parentheses);
-          if (closing_pos == NULL) {
+          struct Position* pos_ptr = pop(&parentheses);
+          if (pos_ptr == NULL) {
             add_error(errors, &error_count, line + 1, col + 1, "unbalanced parentheses");
+          } else {
+            free(pos_ptr);
           }
           break;
         }
@@ -280,9 +287,11 @@ int main(void)
         }
 
         case ']': {
-          struct Position* closing_pos = (struct Position*)pop(&square_brackets);
-          if (closing_pos == NULL) {
+          struct Position* pos_ptr = pop(&square_brackets);
+          if (pos_ptr == NULL) {
             add_error(errors, &error_count, line + 1, col + 1, "unbalanced square brackets");
+          } else {
+            free(pos_ptr);
           }
           break;
         }
