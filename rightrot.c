@@ -38,7 +38,10 @@ void uint_to_bin(const uint x, char bin[], const int buffer_size)
   const uint total_bits = sizeof(x) * BITS_IN_BYTE;
   uint remainder = x;
   for (int i = 0; i < buffer_size; ++i) {
-    const uint bit_value = u_power(2, total_bits - i - 1);
+    // Doing power every iteration is a WASTE!
+    // const uint bit_value = u_power(2, total_bits - i - 1);
+    // Couldn't we just do this?
+    const uint bit_value = 1 << (total_bits - i - 1);
     if (remainder >= bit_value) {
       bin[i] = '1';
       remainder -= bit_value;
